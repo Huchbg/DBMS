@@ -1,10 +1,14 @@
-﻿namespace DBMS
+﻿using DBMS.Utilities;
+
+namespace DBMS
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            InputParser parser = new InputParser();
+            parser.RUN();
+            
         }
     }
 }
