@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "0zR2b+o626VLFtravLjgkryhaBUaOw7wC6NIqBmmkW5vdnRdOJXcxJzh1VzrWhL4LdX1KNCJuGhYYFo/9Isgeg==",
+  "success": true,
+  "projectFilePath": "E:\\C#\\DBMS\\DBMS\\DBMS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\KrisPC\\.nuget\\packages\\microsoft.dotnet.ilcompiler\\8.0.3\\microsoft.dotnet.ilcompiler.8.0.3.nupkg.sha512",
+    "C:\\Users\\KrisPC\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.3\\microsoft.net.illink.tasks.8.0.3.nupkg.sha512",
+    "C:\\Users\\KrisPC\\.nuget\\packages\\runtime.win-x64.microsoft.dotnet.ilcompiler\\8.0.3\\runtime.win-x64.microsoft.dotnet.ilcompiler.8.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
