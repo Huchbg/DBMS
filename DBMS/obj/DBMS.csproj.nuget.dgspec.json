@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\C#\\DBMS\\DBMS\\DBMS.csproj": {}
+    "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj": {}
   },
   "projects": {
-    "E:\\C#\\DBMS\\DBMS\\DBMS.csproj": {
+    "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\C#\\DBMS\\DBMS\\DBMS.csproj",
+        "projectUniqueName": "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj",
         "projectName": "DBMS",
-        "projectPath": "E:\\C#\\DBMS\\DBMS\\DBMS.csproj",
-        "packagesPath": "C:\\Users\\KrisPC\\.nuget\\packages\\",
-        "outputPath": "E:\\C#\\DBMS\\DBMS\\obj\\",
+        "projectPath": "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj",
+        "packagesPath": "C:\\Users\\KRIS.DESKTOP-E9ORFG3\\.nuget\\packages\\",
+        "outputPath": "D:\\C#PROJECTS\\DBMS\\DBMS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\KrisPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\KRIS.DESKTOP-E9ORFG3\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -53,13 +53,13 @@
             "Microsoft.DotNet.ILCompiler": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.3, )",
+              "version": "[8.0.10, )",
               "autoReferenced": true
             },
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.3, )",
+              "version": "[8.0.10, )",
               "autoReferenced": true
             }
           },
@@ -77,7 +77,7 @@
           "downloadDependencies": [
             {
               "name": "runtime.win-x64.Microsoft.DotNet.ILCompiler",
-              "version": "[8.0.3, 8.0.3]"
+              "version": "[8.0.10, 8.0.10]"
             }
           ],
           "frameworkReferences": {
@@ -85,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

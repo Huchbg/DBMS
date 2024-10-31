@@ -54,10 +54,10 @@ namespace DBMS.Utilities
                 }
 
                 ColElement colElement = new ColElement(col[0], type);
-                colElement.SetDefaultData(col[3]);
+                cols.AddLast(colElement);
             }
+            FileManager.CreateTableFile(new Table( trimmedInput[0], cols));
 
-            //TODO: CREATE TABLE WITH FILE MANAGER
         }
         static public void Insert(string input)
         {

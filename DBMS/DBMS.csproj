@@ -9,4 +9,9 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Indexes\" />
+    <Folder Include="Tables\" />
+  </ItemGroup>
+
 </Project>
