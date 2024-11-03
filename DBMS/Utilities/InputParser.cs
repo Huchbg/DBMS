@@ -24,7 +24,7 @@ namespace DBMS.Utilities
                         FrontendCommands.CreateTable(splitInput[1]);
                         break;
                     case "DROPTABLE":
-                        Console.WriteLine("Deletes table");
+                        FrontendCommands.DeleteTable(splitInput[1]);
                         break;
                     case "LISTTABLES":
                         Console.WriteLine("Shows tables");

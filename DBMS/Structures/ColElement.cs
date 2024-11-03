@@ -10,7 +10,7 @@ namespace DBMS.Structures
     {
         private string Name;
         public object Data;
-        private object DefaultData;
+        public object DefaultData;
         private Type Type;
 
         public ColElement(string name,Type type,object data = null)
@@ -18,7 +18,8 @@ namespace DBMS.Structures
             Name = name;
             Type=type;
             Data = data;
-            if(data != null )
+
+            if(data == null )
             {
                 Data = DefaultData;
             }

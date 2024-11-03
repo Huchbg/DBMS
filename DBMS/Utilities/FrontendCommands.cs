@@ -90,7 +90,7 @@ namespace DBMS.Utilities
                 return;
             }
 
-            //TODO: FILEMANAGER INSERT INTO TABLE
+            FileManager.InsertIntoTable(splitInput[1], selectedCols, values);
         }
         static public void Delete(string input)
         {
@@ -182,5 +182,9 @@ namespace DBMS.Utilities
             //TODO: SELECT FROM TABLE WITH FILE MANAGER
         }
 
+        static public void DeleteTable(string input)
+        {
+            FileManager.DeleteTableFile(input);
+        }
     }
 }
