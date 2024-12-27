@@ -10,8 +10,8 @@ namespace DBMS.Utilities
 {
     public static class FileManager
     {
-        public const string tablePath = "../../../Tables";
-        public const string indexesPath = "../../../Indexes";
+        public const string tablePath = "../../../SavedInfo/Tables";
+        public const string indexesPath = "../../../../SavedInfo/Indexes";
 
         public static void CreateTableFile(Table table)
         {
@@ -163,7 +163,105 @@ namespace DBMS.Utilities
             // Update any table indexes if needed
             //UpdateTableIndexes(Name);
         }
+        public static void CreateIndex(string input)
+        {
+            //bd_index ON Sample (BirthDate)
 
+            var splitInput = Utils.Split(input, ' ');
+
+            if (Utils.ToUpper(splitInput[1]) != "ON")
+            {
+                Console.WriteLine("ON not detected");
+                return;
+            }
+
+            string filePath = $"{tablePath}/{splitInput[2]}.txt";
+
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("This Table doesn't exist");
+                return;
+            }
+
+            //splitinput[3] = splitinput[3].Trim('(', ')');
+            char[] chars = new char[2] { '(', ')' };
+            splitInput[3] = Utils.Trim(splitInput[3], chars);
+
+            // Get the column information in the Table
+
+            string[] colLines;
+
+            using (StreamReader sr = new StreamReader($"{tablePath}/{splitInput[2]}.txt"))
+            {
+                colLines = Utils.Split(sr.ReadLine(), '\t');
+            }
+
+            bool foundCol = false;
+            int colIndex = -1;
+
+            // Checks if the column is present in the selected table and raises a flag if it is
+            for (int i = 0; i < colLines.Length; i++)
+                if (splitInput[3] == Utils.Split(colLines[i], ':')[0])
+                {
+                    foundCol = true;
+                    colIndex = i;
+                    break;
+                }
+
+            if (!foundCol)
+            {
+                Console.WriteLine("Indexing Error: Column Name not found");
+                return;
+            }
+
+            // Check if there is an existing index and returns if it does
+            if (File.Exists($"{indexesPath}/{splitInput[2]}_{splitInput[3]}_{splitInput[0]}.txt"))
+            {
+                Console.WriteLine("Indexing Error: The Index already exists");
+                return;
+            }
+
+            // Saves the index 
+            using (StreamWriter sw = File.CreateText($"{indexesPath}/{splitInput[2]}_{splitInput[3]}_{splitInput[0]}.txt"))
+            {
+                using (StreamReader sr = new StreamReader($"{tablePath}/{splitInput[2]}.txt"))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        // Writes directly into the new file the index selecte while splitting each line
+                        sw.WriteLine(Utils.Split(sr.ReadLine(), '\t')[colIndex]);
+                    }
+                }
+            }
+
+            Console.WriteLine("Index Created");
+        }
+
+        public static void DeleteIndex(string input)
+        {
+            //bd_index ON Sample (BirthDate)
+
+            var splitInput = Utils.Split(input, ' ');
+
+            if (Utils.ToUpper(splitInput[1]) != "ON")
+            {
+                Console.WriteLine("ON not detected");
+                return;
+            }
+
+            //splitinput[3] = splitinput[3].Trim('(', ')');
+            char[] chars = new char[2] { '(', ')' };
+            splitInput[3] = Utils.Trim(splitInput[3], chars);
+
+            if (File.Exists($"{indexesPath}/{splitInput[2]}_{splitInput[3]}_{splitInput[0]}.txt"))
+            {
+                File.Delete($"{indexesPath}/{splitInput[2]}_{splitInput[3]}_{splitInput[0]}.txt");
+                Console.WriteLine("Index Deleted");
+                return;
+            }
+
+            Console.WriteLine("Index not Found");
+        }
         public static void UpdateTableIndexes(string Name)
         {
             var fileNames = Directory.GetFiles(indexesPath);
@@ -204,6 +302,46 @@ namespace DBMS.Utilities
                     }
                 }
             }
+        }
+
+        public static int TableFilesCount()
+        {
+            return Directory.GetFiles(tablePath).Length;
+        }
+
+        public static string? GetTableNames()
+        {
+            if (FileManager.TableFilesCount() == 0)
+                return null;
+
+            var files = Directory.GetFiles(tablePath);
+
+            string tableInfo = "The Available Tables are: ";
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                tableInfo += Path.GetFileNameWithoutExtension(files[i]);
+                if (i != files.Length - 1)
+                    tableInfo += ", ";
+            }
+
+            return tableInfo;
+        }
+
+        public static string[]? GetTableInfo(string Name, out string info)
+        {
+            if (!File.Exists($"{tablePath}/{Name}.txt"))
+            {
+                Console.WriteLine("This Table doesn't exist");
+                info = null;
+                return null;
+            }
+
+            var lines = File.ReadAllLines($"{tablePath}/{Name}.txt");
+
+            info = new FileInfo($"{tablePath}/{Name}.txt").Length.ToString();
+
+            return lines;
         }
     }
 }

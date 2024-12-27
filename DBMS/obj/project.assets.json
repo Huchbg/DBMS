@@ -2,13 +2,13 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "Microsoft.DotNet.ILCompiler/8.0.10": {
+      "Microsoft.DotNet.ILCompiler/8.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.DotNet.ILCompiler.props": {}
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.10": {
+      "Microsoft.NET.ILLink.Tasks/8.0.3": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -17,10 +17,10 @@
     }
   },
   "libraries": {
-    "Microsoft.DotNet.ILCompiler/8.0.10": {
-      "sha512": "iThS5LNCcLlFkUlnxCJMgMSQ6s1BgbZo9ri11DDgNxDn8StwgFVUQJ8O5N/7S037jcS1md8tWp7Zu2YconIlag==",
+    "Microsoft.DotNet.ILCompiler/8.0.3": {
+      "sha512": "LGNORlVTRa2FDy3OcP3Xu1ZSJW4tz2ATO3WrHUwHg7kxbR9HChezgJ51CwZJQt8+Yp6acp32FDC/FTPdFDOumQ==",
       "type": "package",
-      "path": "microsoft.dotnet.ilcompiler/8.0.10",
+      "path": "microsoft.dotnet.ilcompiler/8.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -39,7 +39,7 @@
         "build/NativeAOT.natvis",
         "build/WindowsAPIs.txt",
         "build/findvcvarsall.bat",
-        "microsoft.dotnet.ilcompiler.8.0.10.nupkg.sha512",
+        "microsoft.dotnet.ilcompiler.8.0.3.nupkg.sha512",
         "microsoft.dotnet.ilcompiler.nuspec",
         "runtime.json",
         "tools/netstandard/ILCompiler.Build.Tasks.deps.json",
@@ -47,10 +47,10 @@
         "tools/netstandard/ILCompiler.Build.Tasks.pdb"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/8.0.10": {
-      "sha512": "xT8jYjlroY7SLbGtoV9vUTVW/TPgodL4Egc31a444Xe0TMytLZ3UlKQ0kxMZsy/CrWsFB6wtKnSG1SsXcWreew==",
+    "Microsoft.NET.ILLink.Tasks/8.0.3": {
+      "sha512": "0kwNg0LBIvVTx9A2mo9Mnw4wLGtaeQgjSz5P13bOOwdWPPLe9HzI+XTkwiMhS7iQCM6X4LAbFR76xScaMw0MrA==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/8.0.10",
+      "path": "microsoft.net.illink.tasks/8.0.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -64,7 +64,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.8.0.10.nupkg.sha512",
+        "microsoft.net.illink.tasks.8.0.3.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -101,28 +101,28 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Microsoft.DotNet.ILCompiler >= 8.0.10",
-      "Microsoft.NET.ILLink.Tasks >= 8.0.10"
+      "Microsoft.DotNet.ILCompiler >= 8.0.3",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\KRIS.DESKTOP-E9ORFG3\\.nuget\\packages\\": {},
+    "C:\\Users\\KrisPC\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj",
+      "projectUniqueName": "E:\\C#\\DBMS\\DBMS\\DBMS.csproj",
       "projectName": "DBMS",
-      "projectPath": "D:\\C#PROJECTS\\DBMS\\DBMS\\DBMS.csproj",
-      "packagesPath": "C:\\Users\\KRIS.DESKTOP-E9ORFG3\\.nuget\\packages\\",
-      "outputPath": "D:\\C#PROJECTS\\DBMS\\DBMS\\obj\\",
+      "projectPath": "E:\\C#\\DBMS\\DBMS\\DBMS.csproj",
+      "packagesPath": "C:\\Users\\KrisPC\\.nuget\\packages\\",
+      "outputPath": "E:\\C#\\DBMS\\DBMS\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\KRIS.DESKTOP-E9ORFG3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\KrisPC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -158,13 +158,13 @@
           "Microsoft.DotNet.ILCompiler": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.10, )",
+            "version": "[8.0.3, )",
             "autoReferenced": true
           },
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.10, )",
+            "version": "[8.0.3, )",
             "autoReferenced": true
           }
         },
@@ -182,7 +182,7 @@
         "downloadDependencies": [
           {
             "name": "runtime.win-x64.Microsoft.DotNet.ILCompiler",
-            "version": "[8.0.10, 8.0.10]"
+            "version": "[8.0.3, 8.0.3]"
           }
         ],
         "frameworkReferences": {
@@ -190,7 +190,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

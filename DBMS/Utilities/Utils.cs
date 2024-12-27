@@ -258,7 +258,89 @@ namespace DBMS.Utilities
             return sliced;
         }
 
+        public static string Trim(string input, char[] trimChars)
+        {
+            int start = 0;
+            int end = input.Length - 1;
 
-      
+            // Find the first non-trim character from the start
+            while (start <= end)
+            {
+                bool found = false;
+                for (int i = 0; i < trimChars.Length; i++)
+                {
+                    // check if the current character is present in the trimChars array
+                    if (input[start] == trimChars[i])
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    // if it's not a trim character, then break the loop
+                    break;
+                }
+                start++;
+            }
+
+            // Find the last non-trim character from the end
+            while (end >= start)
+            {
+                bool found = false;
+                for (int i = 0; i < trimChars.Length; i++)
+                {
+                    // check if the current character is present in the trimmedchars
+                    if (input[end] == trimChars[i])
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    // if it's not a trim character, then break the loop
+                    break;
+                }
+                end--;
+            }
+
+            // create a new string with the non-trim characters
+            char[] modified = new char[end - start + 1];
+            int k = 0;
+            for (int i = start; i <= end; i++)
+            {
+                modified[k++] = input[i];
+            }
+            // create a new string from the char array
+            return new string(modified);
+        }
+        public static string Trim(string input, char trimChar)
+        {
+            int start = 0;
+            int end = input.Length - 1;
+
+            // Find the first non-trim character from the start
+            while (start <= end && input[start] == trimChar)
+            {
+                start++;
+            }
+
+            // Find the last non-trim character from the end
+            while (end >= start && input[end] == trimChar)
+            {
+                end--;
+            }
+
+            // create a new string with the non-trim characters
+            char[] modified = new char[end - start + 1];
+            int k = 0;
+            for (int i = start; i <= end; i++)
+            {
+                modified[k++] = input[i];
+            }
+            return new string(modified);
+        }
+
     }
 }
