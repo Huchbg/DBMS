@@ -12,6 +12,11 @@ namespace DBMS.Utilities
     {
         public const string tablePath = "../../../SavedInfo/Tables";
         public const string indexesPath = "../../../../SavedInfo/Indexes";
+        private static bool distinctFlag = false;
+        private static int orderByFlag = 0;
+        private static Type orderColType = null;
+        private static int orderColIndex = -1;
+        private static CustomLinkedList<ulong> rowHash = null;
 
         public static void CreateTableFile(Table table)
         {
@@ -309,39 +314,202 @@ namespace DBMS.Utilities
             return Directory.GetFiles(tablePath).Length;
         }
 
-        public static string? GetTableNames()
+        public static void GetTableNames()
         {
             if (FileManager.TableFilesCount() == 0)
-                return null;
+            {
+                Console.WriteLine("\nThere are no available Tables\n");
+                return;
+            }
+
+            Console.WriteLine("\nThe Available Tables are:\n");
 
             var files = Directory.GetFiles(tablePath);
 
-            string tableInfo = "The Available Tables are: ";
-
             for (int i = 0; i < files.Length; i++)
-            {
-                tableInfo += Path.GetFileNameWithoutExtension(files[i]);
-                if (i != files.Length - 1)
-                    tableInfo += ", ";
-            }
-
-            return tableInfo;
+                Console.WriteLine(Path.GetFileNameWithoutExtension(files[i]));
+            Console.WriteLine();
         }
 
-        public static string[]? GetTableInfo(string Name, out string info)
+        public static void GetTableInfo(string Name)
         {
             if (!File.Exists($"{tablePath}/{Name}.txt"))
             {
                 Console.WriteLine("This Table doesn't exist");
-                info = null;
-                return null;
+                return;
             }
 
             var lines = File.ReadAllLines($"{tablePath}/{Name}.txt");
 
-            info = new FileInfo($"{tablePath}/{Name}.txt").Length.ToString();
+            for (int i = 0; i < lines.Length; i++)
+            {
+                Console.WriteLine(lines[i]);
+            }
 
-            return lines;
+            Console.WriteLine($"The Entries in the Table are {lines.Length - 1}");
+
+            FileInfo info = new FileInfo($"{tablePath}/{Name}.txt");
+
+            Console.WriteLine($"File Size is : {info.Length} bytes");
+        }
+
+        public static void SelectInTable(string Name, string[] inputvalues, string[]? conditions = null)
+        {
+            string filepath = $"{tablePath}/{Name}.txt";
+
+            if (!File.Exists(filepath))
+            {
+                Console.WriteLine("This Table doesn't exist");
+                return;
+            }
+
+            distinctFlag = false;
+            // flag = 0 -> No order by
+            // flag = 1 -> order by ASC
+            // flag = -1 -> order by DESC
+            orderByFlag = 0;
+            string[] inputcols;
+            string ordercolname = string.Empty;
+            orderColType = null;
+            // Order By Check
+            if (conditions != null)
+            {
+                if (Utils.ToUpper(conditions[conditions.Length - 3]) == "ORDER" || Utils.ToUpper(conditions[conditions.Length - 3]) == "BY")
+                {
+                    orderByFlag = 1;
+                    // 0 = ASC(Default) || 1 = DESC             
+                    // Checks if ASC OR DESC is available
+                    if (Utils.ToUpper(conditions[conditions.Length - 1]) != "DESC" && Utils.ToUpper(conditions[conditions.Length - 1]) != "ASC")
+                    {
+                        ordercolname = conditions[conditions.Length - 1];
+                        conditions = Utils.Slice(conditions, 0, conditions.Length - 3);
+                        if (conditions.Length == 0)
+                            conditions = null;
+                    }
+                    else
+                    {
+                        ordercolname = conditions[conditions.Length - 2];
+                        if (Utils.ToUpper(conditions[conditions.Length - 1]) == "DESC")
+                            orderByFlag = -1;
+                        conditions = Utils.Slice(conditions, 0, conditions.Length - 4);
+                        if (conditions.Length == 0)
+                            conditions = null;
+                    }
+                }
+            }
+
+            // Distinct Check
+            if (Utils.ToUpper(inputvalues[0]) == "DISTINCT")
+            {
+                distinctFlag = true;
+                inputcols = new string[inputvalues.Length - 1];
+                for (int i = 0; i < inputcols.Length; i++)
+                {
+                    inputcols[i] = inputvalues[i + 1];
+                }
+            }
+            else
+            {
+                inputcols = inputvalues;
+            }
+
+            string[] collines;
+            using (StreamReader sr = new StreamReader(filepath))
+            {
+                collines = Utils.Split(sr.ReadLine(), '\t');
+            }
+
+            string[] colnames = new string[collines.Length];
+            string[] coltypes = new string[collines.Length];
+            for (int i = 0; i < collines.Length; i++)
+            {
+                var colvalues = Utils.Split(collines[i], ':');
+
+                colnames[i] = colvalues[0];
+                coltypes[i] = Utils.Split(colvalues[1], ' ')[0];
+            }
+
+            // Check for Order by Col Index
+            orderColIndex = -1;
+            if (!Utils.Contains(colnames, ordercolname) && orderByFlag != 0)
+            {
+                Console.WriteLine($"{ordercolname} is not available in the given Table");
+                return;
+            }
+            else
+            {
+                for (int k = 0; k < colnames.Length; k++)
+                {
+                    if (ordercolname == colnames[k])
+                    {
+                        orderColIndex = k;
+                        switch (coltypes[k])
+                        {
+                            case "System.Int32":
+                                orderColType = typeof(int);
+                                break;
+                            case "System.String":
+                                orderColType = typeof(string);
+                                break;
+                            case "System.DateTime":
+                                orderColType = typeof(DateTime);
+                                break;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            int[] indexes;
+            if (inputcols[0] == "*")
+            {
+                indexes = new int[colnames.Length];
+
+                for (int i = 0; i < colnames.Length; i++)
+                    indexes[i] = i;
+            }
+            else
+            {
+                indexes = new int[inputcols.Length];
+
+                for (int i = 0; i < inputcols.Length; i++)
+                {
+                    if (!Utils.Contains(colnames, inputcols[i]))
+                    {
+                        Console.WriteLine($"{inputcols[i]} is not available in the given Table");
+                        return;
+                    }
+
+                    for (int k = 0; k < colnames.Length; k++)
+                    {
+                        if (inputcols[i] == colnames[k])
+                        {
+                            indexes[i] = k;
+                            break;
+                        }
+                    }
+                }
+            }
+            rowHash = null;
+
+            // Select..
+            if (conditions == null)
+            {
+               // Select(filepath, indexes, inputcols[0]);
+            }
+            else // Select... Where
+            {
+
+                /*if (!ContainIndexes(Name, conditions))
+                {
+
+                }*/
+
+              //  SelectWhere(filepath, collines, indexes, inputcols[0], conditions);
+            }
+
+
+
         }
     }
 }

@@ -180,6 +180,7 @@ namespace DBMS.Utilities
             }
 
             //TODO: SELECT FROM TABLE WITH FILE MANAGER
+            FileManager.SelectInTable(splitInput[index + 1], inputCols, conditions);
         }
 
         static public void DeleteTable(string input)

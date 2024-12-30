@@ -341,6 +341,14 @@ namespace DBMS.Utilities
             }
             return new string(modified);
         }
-
+        public static bool Contains(string[] input, string item)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == item)
+                    return true;
+            }
+            return false;
+        }
     }
 }
