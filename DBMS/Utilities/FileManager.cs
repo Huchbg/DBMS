@@ -353,7 +353,7 @@ namespace DBMS.Utilities
             Console.WriteLine($"File Size is : {info.Length} bytes");
         }
 
-        public static void SelectInTable(string Name, string[] inputvalues, string[]? conditions = null)
+        public static void SelectInTable(string Name, string[] inputValues, string[]? conditions = null)
         {
             string filepath = $"{tablePath}/{Name}.txt";
 
@@ -368,8 +368,8 @@ namespace DBMS.Utilities
             // flag = 1 -> order by ASC
             // flag = -1 -> order by DESC
             orderByFlag = 0;
-            string[] inputcols;
-            string ordercolname = string.Empty;
+            string[] inputCols;
+            string orderColName = string.Empty;
             orderColType = null;
             // Order By Check
             if (conditions != null)
@@ -381,14 +381,14 @@ namespace DBMS.Utilities
                     // Checks if ASC OR DESC is available
                     if (Utils.ToUpper(conditions[conditions.Length - 1]) != "DESC" && Utils.ToUpper(conditions[conditions.Length - 1]) != "ASC")
                     {
-                        ordercolname = conditions[conditions.Length - 1];
+                        orderColName = conditions[conditions.Length - 1];
                         conditions = Utils.Slice(conditions, 0, conditions.Length - 3);
                         if (conditions.Length == 0)
                             conditions = null;
                     }
                     else
                     {
-                        ordercolname = conditions[conditions.Length - 2];
+                        orderColName = conditions[conditions.Length - 2];
                         if (Utils.ToUpper(conditions[conditions.Length - 1]) == "DESC")
                             orderByFlag = -1;
                         conditions = Utils.Slice(conditions, 0, conditions.Length - 4);
@@ -399,51 +399,51 @@ namespace DBMS.Utilities
             }
 
             // Distinct Check
-            if (Utils.ToUpper(inputvalues[0]) == "DISTINCT")
+            if (Utils.ToUpper(inputValues[0]) == "DISTINCT")
             {
                 distinctFlag = true;
-                inputcols = new string[inputvalues.Length - 1];
-                for (int i = 0; i < inputcols.Length; i++)
+                inputCols = new string[inputValues.Length - 1];
+                for (int i = 0; i < inputCols.Length; i++)
                 {
-                    inputcols[i] = inputvalues[i + 1];
+                    inputCols[i] = inputValues[i + 1];
                 }
             }
             else
             {
-                inputcols = inputvalues;
+                inputCols = inputValues;
             }
 
-            string[] collines;
+            string[] colLines;
             using (StreamReader sr = new StreamReader(filepath))
             {
-                collines = Utils.Split(sr.ReadLine(), '\t');
+                colLines = Utils.Split(sr.ReadLine(), '\t');
             }
 
-            string[] colnames = new string[collines.Length];
-            string[] coltypes = new string[collines.Length];
-            for (int i = 0; i < collines.Length; i++)
+            string[] colNames = new string[colLines.Length];
+            string[] colTypes = new string[colLines.Length];
+            for (int i = 0; i < colLines.Length; i++)
             {
-                var colvalues = Utils.Split(collines[i], ':');
+                var colValues = Utils.Split(colLines[i], ':');
 
-                colnames[i] = colvalues[0];
-                coltypes[i] = Utils.Split(colvalues[1], ' ')[0];
+                colNames[i] = colValues[0];
+                colTypes[i] = Utils.Split(colValues[1], ' ')[0];
             }
 
             // Check for Order by Col Index
             orderColIndex = -1;
-            if (!Utils.Contains(colnames, ordercolname) && orderByFlag != 0)
+            if (!Utils.Contains(colNames, orderColName) && orderByFlag != 0)
             {
-                Console.WriteLine($"{ordercolname} is not available in the given Table");
+                Console.WriteLine($"{orderColName} is not available in the given Table");
                 return;
             }
             else
             {
-                for (int k = 0; k < colnames.Length; k++)
+                for (int k = 0; k < colNames.Length; k++)
                 {
-                    if (ordercolname == colnames[k])
+                    if (orderColName == colNames[k])
                     {
                         orderColIndex = k;
-                        switch (coltypes[k])
+                        switch (colTypes[k])
                         {
                             case "System.Int32":
                                 orderColType = typeof(int);
@@ -461,28 +461,28 @@ namespace DBMS.Utilities
             }
 
             int[] indexes;
-            if (inputcols[0] == "*")
+            if (inputCols[0] == "*")
             {
-                indexes = new int[colnames.Length];
+                indexes = new int[colNames.Length];
 
-                for (int i = 0; i < colnames.Length; i++)
+                for (int i = 0; i < colNames.Length; i++)
                     indexes[i] = i;
             }
             else
             {
-                indexes = new int[inputcols.Length];
+                indexes = new int[inputCols.Length];
 
-                for (int i = 0; i < inputcols.Length; i++)
+                for (int i = 0; i < inputCols.Length; i++)
                 {
-                    if (!Utils.Contains(colnames, inputcols[i]))
+                    if (!Utils.Contains(colNames, inputCols[i]))
                     {
-                        Console.WriteLine($"{inputcols[i]} is not available in the given Table");
+                        Console.WriteLine($"{inputCols[i]} is not available in the given Table");
                         return;
                     }
 
-                    for (int k = 0; k < colnames.Length; k++)
+                    for (int k = 0; k < colNames.Length; k++)
                     {
-                        if (inputcols[i] == colnames[k])
+                        if (inputCols[i] == colNames[k])
                         {
                             indexes[i] = k;
                             break;
@@ -495,7 +495,7 @@ namespace DBMS.Utilities
             // Select..
             if (conditions == null)
             {
-               // Select(filepath, indexes, inputcols[0]);
+                Select(filepath, indexes, inputCols[0]);
             }
             else // Select... Where
             {
@@ -510,6 +510,168 @@ namespace DBMS.Utilities
 
 
 
+        }
+
+        private static void Select(string filepath, int[] indexes, string inputcol)
+        {
+            var lines = File.ReadAllLines(filepath);
+
+            // Checks if Order by has Been Selected
+            if (orderByFlag != 0)
+            {
+                CustomLinkedList<int> selectedIndexes = new CustomLinkedList<int>();
+                CustomLinkedList<string> rows = new CustomLinkedList<string>();
+
+                if (distinctFlag)
+                {
+                    rowHash = new CustomLinkedList<ulong>();
+                    for (int i = 1; i < lines.Length; i++)
+                    {
+                        Distinct(lines[i], i - 1, Utils.Split(lines[i], '\t'), indexes, inputcol, ref rowHash, ref rows, ref selectedIndexes);
+                    }
+                }
+                else
+                {
+                    if (inputcol == "*")
+                    {
+                        for (int i = 1; i < lines.Length; i++)
+                            rows.AddLast(lines[i]);
+                    }
+                    else
+                    {
+
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            var line = Utils.Split(lines[i], '\t');
+                            string rowline = string.Empty;
+
+                            for (int k = 0; k < indexes.Length; k++)
+                                rowline += line[indexes[k]] + '\t';
+
+                            rows.AddLast(rowline);
+                        }
+                    }
+
+                }
+
+                Utils.Sort(orderColType, Utils.Slice(lines, 1, lines.Length), rows, orderColIndex, selectedIndexes, orderByFlag);
+
+                for (int i = 0; i < rows.Count; i++)
+                {
+                    Console.WriteLine(rows.ElementAt(i).Value);
+                }
+
+            }
+            else
+            {
+                // Checks if Distinct has been Selected
+                if (distinctFlag)
+                {
+                    CustomLinkedList<string> a = null;
+                    CustomLinkedList<int> b = null;
+                    rowHash = new CustomLinkedList<ulong>();
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        Distinct(lines[i], i, Utils.Split(lines[i], '\t'), indexes, inputcol, ref rowHash, ref a, ref b);
+                    }
+                }
+                else
+                {
+                    if (inputcol == "*")
+                    {
+
+                        for (int i = 0; i < lines.Length; i++)
+                            Console.WriteLine(lines[i]);
+                    }
+                    else
+                    {
+
+                        for (int i = 0; i < lines.Length; i++)
+                        {
+                            var line = Utils.Split(lines[i], '\t');
+
+                            for (int k = 0; k < indexes.Length; k++)
+                            {
+                                Console.Write(line[indexes[k]] + '\t');
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void Distinct(string row, int rowIndex, string[]? rowValues, int[] indexes, string inputcol, ref CustomLinkedList<ulong> rowHash, ref CustomLinkedList<string> rows, ref CustomLinkedList<int> selectedIndexes)
+        {
+            if (rows != null)
+            {
+                if (!Utils.Contains(rowHash, UniqueHash(row)))
+                {
+                    rowHash?.AddLast(UniqueHash(row));
+                    string rowline = string.Empty;
+                    if (inputcol == "*")
+                    {
+                        for (int i = 0; i < rowValues.Length; i++)
+                        {
+                            rowline += rowValues[i] + "\t";
+                        }
+
+                        rows.AddLast(rowline);
+                        selectedIndexes.AddLast(rowIndex);
+                    }
+                    else
+                    {
+                        for (int k = 0; k < indexes.Length; k++)
+                        {
+                            rowline += rowValues[indexes[k]] + '\t';
+                        }
+
+                        rows.AddLast(rowline);
+                        selectedIndexes.AddLast(rowIndex);
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+                if (!Utils.Contains(rowHash, UniqueHash(row)))
+                {
+                    rowHash?.AddLast(UniqueHash(row));
+
+                    if (inputcol == "*")
+                        for (int i = 0; i < rowValues.Length; i++)
+                            Console.Write(rowValues[i] + "\t");
+                    else
+                        for (int k = 0; k < indexes.Length; k++)
+                            Console.Write(rowValues[indexes[k]] + '\t');
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        static ulong UniqueHash(string s)
+        {
+            // Initialize the hash value to a prime number
+            ulong hash = 17;
+
+            // For each character in the string, update the hash value
+            // using the following formula:
+            // hash = (hash * 31) + c
+            // The hash value is multiplied by the index of the character
+            // in the string, so that the order of the characters matters
+            // The hash value is also XORed with the Unicode code of the
+            // character, to make the hash value more difficult to predict
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                hash = (hash * 31 * ((ulong)i + 1)) ^ c;
+            }
+
+            // Return the final hash value
+            return hash;
         }
     }
 }
