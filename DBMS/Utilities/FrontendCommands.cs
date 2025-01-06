@@ -111,6 +111,7 @@ namespace DBMS.Utilities
             }
 
             //TODO: FILEMANAGER DELETE IN TABLE 
+            Console.WriteLine("delete in table is not supporteed yet ");
         }
         static public void Select(string input)
         {

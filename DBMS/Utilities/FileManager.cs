@@ -166,7 +166,7 @@ namespace DBMS.Utilities
             }
 
             // Update any table indexes if needed
-            //UpdateTableIndexes(Name);
+            UpdateTableIndexes(Name);
         }
         public static void CreateIndex(string input)
         {
@@ -500,12 +500,9 @@ namespace DBMS.Utilities
             else // Select... Where
             {
 
-                /*if (!ContainIndexes(Name, conditions))
-                {
-
-                }*/
-
-              //  SelectWhere(filepath, collines, indexes, inputcols[0], conditions);
+              
+                Console.WriteLine("select ... where is not supported ");
+                //  SelectWhere(filepath, collines, indexes, inputcols[0], conditions);
             }
 
 
